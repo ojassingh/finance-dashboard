@@ -1,16 +1,15 @@
 'use client'
 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const Profile = () => {
   const router = useRouter();
-  const accessToken = router.query.access_token;
 
   // Use the accessToken in your profile page
   // ...
 
   return(
-    <p>{accessToken}</p>
+    <p></p>
   );
 };
 
