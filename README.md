@@ -1,34 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Spotify User Analytics
+
+This is a Spotify-based Next.js application that allows users to log in with their Spotify account and access their Spotify API data. The app uses the Spotify Web API to authenticate users and retrieve their access token, which can then be used for making authorized requests to the Spotify API.
+
+## Features
+
+- User authentication with Spotify
+- Fetching user data from the Spotify API
+- Accessing user playlists, tracks, and other Spotify data
+- React-based UI for a seamless user experience
 
 ## Getting Started
 
-First, run the development server:
+To run this application on your local machine, follow these steps:
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/spotify-nextjs-app.git
+cd spotify-nextjs-app
+```
+
+2. Install Dependencies:
+
+```bash
+npm install
+```
+
+3. Setup environmental variables
+
+```bash
+NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_spotify_client_id
+NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+NEXT_PUBLIC_SPOTIFY_REDIRECT_URI=http://localhost:3000/callback
+```
+
+Replace your_spotify_client_id and your_spotify_client_secret with your actual Spotify application credentials. The NEXT_PUBLIC_SPOTIFY_REDIRECT_URI is the callback URL for Spotify authorizatio
+
+4. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app should now be running on http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Open your browser and navigate to http://localhost:3000.
+2. Click on the "Log in with Spotify" button to authorize the app with your Spotify account.
+3. You will be redirected to the Spotify login page. Enter your credentials and authorize the app.
+4. After successful login, you will be redirected back to the app.
+5. The app will fetch your access token from Spotify and use it to make authorized requests to the Spotify API.
+6. You can now access your Spotify data and explore various features of the app.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Built with
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Next.js - The React framework for building the application
+* Axios - For making HTTP requests to the Spotify Web API
+* querystring - For parsing and handling URL query parameters
+* Spotify Web API - For user authentication and data retrieval
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+Contributions are welcome! If you find any issues or have any suggestions for improvements, feel free to open an issue or submit a pull request.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT License.
+
+## Acknowledgments 
+
+Special thanks to the Spotify Web API for providing the necessary tools to create this application.
