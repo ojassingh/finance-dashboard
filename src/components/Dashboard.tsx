@@ -1,8 +1,9 @@
+'use client'
+
 import { useState, ChangeEvent } from "react";
 import axios from "axios";
-import { Line, Chart as Chart2} from "react-chartjs-2";
-import { CategoryScale, Chart, type ChartData, type ChartOptions, registerables} from 'chart.js';
-import { faker } from '@faker-js/faker';
+import { Chart as Chart2} from "react-chartjs-2";
+import { Chart, type ChartData, type ChartOptions, registerables} from 'chart.js';
 
 interface StockData {
   [key: string]: string;
