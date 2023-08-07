@@ -4,10 +4,10 @@ import { useState, ChangeEvent } from "react";
 import { Chart as Chart2 } from "react-chartjs-2";
 import {
   Chart,
-  type ChartData,
-  type ChartOptions,
   registerables,
 } from "chart.js";
+
+
 import fetchStockData from "@/functions/fetchStockData";
 // import fetchTickers from "@/functions/fetchTickers";
 
