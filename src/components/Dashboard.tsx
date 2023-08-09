@@ -6,9 +6,9 @@ import {
   Chart,
   registerables,
 } from "chart.js";
-
-
+import { ComboboxDemo } from "./Combobox";
 import fetchStockData from "@/functions/fetchStockData";
+import { Button } from "./ui/button";
 // import fetchTickers from "@/functions/fetchTickers";
 
 const Dashboard: React.FC = () => {
@@ -55,6 +55,8 @@ const Dashboard: React.FC = () => {
           placeholder="Enter stock symbol (e.g., AAPL)"
         />
         <button onClick={fetchData}>Fetch Data</button>
+        {/* <ComboboxDemo/> */}
+        {/* <Button/> */}
       </div>
       {data ? (
         <div className="">
