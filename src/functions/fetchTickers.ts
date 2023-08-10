@@ -1,9 +1,8 @@
 import axios from "axios";
 
-const fetchTickers = async (props: any) => {
+const fetchTickers = async (props: string) => {
 
-  const name = props.name;
-
+  const name = props;
   try {
     const apiKey = process.env.NEXT_PUBLIC_ALPHA_VANTAGE_API_KEY;
 
