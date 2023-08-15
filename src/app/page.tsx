@@ -1,10 +1,6 @@
 'use client'
-
-import { SessionProvider } from 'next-auth/react'
-import { signIn, signOut, useSession } from 'next-auth/react';
-import Dashboard from '@/components/Dashboard';
 import { ModeToggle } from '@/components/Toggle';
-import { ToastSimple } from '@/components/Poop';
+import { ComboboxForm } from '@/components/Combobox';
 
 export default function Home() {
 
@@ -14,7 +10,8 @@ export default function Home() {
 
           <div className='my-auto'>
             <ModeToggle/>
-            <Dashboard/>
+            <ComboboxForm/>
+            {/* <Dashboard/> */}
           </div>
           
         </main>

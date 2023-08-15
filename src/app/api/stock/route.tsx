@@ -1,9 +1,12 @@
+import {NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-const fetchStockData = async (props: any) => {
 
-  const interval = props.interval;
-  const symbol = props.symbol;
+export async function GET(req:NextRequest, res: NextResponse) {
+
+  const symbol = req.nextUrl.searchParams.get('symbol')?.toUpperCase() || '';
+  const interval = req.nextUrl.searchParams.get('interval')?.toLowerCase() || 'daily';
+
 
   try {
     const apiKey = process.env.NEXT_PUBLIC_ALPHA_VANTAGE_API_KEY;
@@ -36,10 +39,10 @@ const fetchStockData = async (props: any) => {
       console.error(
         "Error fetching stock data: Time series data is null or undefined."
       );
-      return;
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 
-    const labels = Object.keys(timeSeries).slice(0, 30);
+    const labels = Object.keys(timeSeries).reverse().slice(0, 100);
     const prices = Object.values(timeSeries).map((data: any) =>
       parseFloat(data["4. close"])
     );
@@ -56,11 +59,16 @@ const fetchStockData = async (props: any) => {
       ],
     };
 
-    return chartData;
-  } catch (error) {
-    console.error("Error fetching stock data:", error);
-    return null;
-  }
-};
+      return NextResponse.json({ data: chartData }, { status: 200});
 
-export default fetchStockData;
+  } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+  }
+
+//   return NextResponse.json({ symbol : symbol, interval: interval }, { status: 200});
+  // return NextResponse.json(tickerArray, { status: 200 });
+
+  
+}
+
+

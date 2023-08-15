@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse } from "next/server";
-import fetchTickers from "@/functions/fetchTickers";
+// import fetchTickers from "@/functions/fetchTickers";
  
 export async function GET(req:NextRequest, res: NextResponse) {
 
@@ -19,7 +19,7 @@ export async function GET(req:NextRequest, res: NextResponse) {
     return symbolMatch || nameMatch;
   });
 
-  const sortedTickers = matchedStocks.slice(0, 10); // Limit to 10 results
+  const sortedTickers = matchedStocks.slice(0, 7); // Limit to 10 results
 
   return NextResponse.json({ results: sortedTickers }, { status: 200});
   // return NextResponse.json(tickerArray, { status: 200 });
