@@ -30,7 +30,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import fetchTickers from "@/functions/fetchTickers";
 
 const languages = [
@@ -46,8 +46,8 @@ const languages = [
 ] as const;
 
 const FormSchema = z.object({
-  language: z.string({
-    required_error: "Please select a language.",
+  symbol: z.string({
+    required_error: "Please select a symbol.",
   }),
 });
 
@@ -59,17 +59,25 @@ export function ComboboxForm() {
   const [searchTerm, setSearchTerm] = useState("");
   const [tickers, setTickers] = useState([]);
 
-  const handleInputChange = async (e: any) => {
-    const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
 
-    if (newSearchTerm.length >= 2) {
-      const fetchedTickers = await fetchTickers(newSearchTerm);
-      setTickers(fetchedTickers);
-    } else {
-      setTickers([]);
-    }
+  function handleInputChange(event: any){
+    const input = event;
+    setSearchTerm(input)
+    fetchSuggestions(input)
+    // console.log(input)
   };
+
+  async function fetchSuggestions(input: string){
+    const tickers = await fetch(`/api/suggestions?input=${input}`);
+    const data = await tickers.json();
+    console.log(data)
+  }
+
+  // useEffect(()=>{
+  //   fetchSuggestions('msft')
+  // }), []
+
+
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
@@ -87,7 +95,7 @@ export function ComboboxForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="language"
+          name="symbol"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Language</FormLabel>
@@ -105,40 +113,44 @@ export function ComboboxForm() {
                         !field.value && "text-muted-foreground"
                       )}
                     >
-                      {field.value
-                        ? languages.find(
-                            (language) => language.value === field.value
-                          )?.label
-                        : "Select language"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      {/* {field.value
+                        ? tickers.find(
+                            (symbol: any) => symbol.symbol === field.value
+                          )?.name
+                        : "Select Symbol"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
+
+                      Hi there
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
-                    <CommandInput placeholder="Search framework..." />
+                    <CommandInput onValueChange={(event)=>{
+                      handleInputChange(event)
+                    }} placeholder="Search framework..." />
                     <CommandEmpty>No framework found.</CommandEmpty>
-                    <CommandGroup>
-                      {languages.map((language) => (
+                    {/* <CommandGroup>
+                      {tickers.map((ticker: any) => (
                         <CommandItem
-                          value={language.label}
-                          key={language.value}
+                          value={ticker.smybol}
+                          key={ticker.symbol}
                           onSelect={() => {
-                            form.setValue("language", language.value);
+                            form.setValue("symbol", ticker.symbol);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              language.value === field.value
+                              ticker.symbol === field.symbol
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
                           />
-                          {language.label}
+                          {ticker.name}
                         </CommandItem>
                       ))}
-                    </CommandGroup>
+                    </CommandGroup> */}
                   </Command>
                 </PopoverContent>
               </Popover>
