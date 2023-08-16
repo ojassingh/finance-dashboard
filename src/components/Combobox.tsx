@@ -30,9 +30,9 @@ import {
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
-
 import { Chart as Chart2 } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
+import { ModeToggle } from "./Toggle";
 
 const FormSchema = z.object({
   symbol: z.string({
@@ -46,23 +46,20 @@ export function ComboboxForm() {
     resolver: zodResolver(FormSchema),
   });
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [tickers, setTickers] = useState([]);
+  const [tickers, setTickers] = useState<any>([]);
   const [symbol, setSymbol] = useState("");
   const [chartData, setChartData] = useState(null);
 
   function handleInputChange(event: any) {
     const input = event;
-    setSearchTerm(input);
     fetchSuggestions(input);
-    // console.log(input)
   }
 
   async function fetchSuggestions(input: string) {
+    setTickers([{ name: "Loading...", symbol: "" }]);
     const tickers = await fetch(`/api/suggestions?input=${input}`);
     const data = await tickers.json();
     setTickers(data.results);
-    // console.log(data.results);
   }
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -94,17 +91,20 @@ export function ComboboxForm() {
     },
   };
 
-
   return (
-    <div>
+    <div className={`grid place-content-center min-h-screen`}>
+      <div className="fixed top-0 right-0 p-4 ">
+        <ModeToggle />
+      </div>
+      <div className="">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="flex gap-4">
           <FormField
             control={form.control}
             name="symbol"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Language</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl id=":R7kracq:-form-item-description">
@@ -151,9 +151,6 @@ export function ComboboxForm() {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <FormDescription id=":R7kracq:-form-item-description">
-                  This is the language that will be used in the dashboard.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -161,10 +158,12 @@ export function ComboboxForm() {
           <Button variant="outline" type="submit">
             Submit
           </Button>
+          </div>
         </form>
       </Form>
+      </div>
 
-      {chartData ? (
+      {chartData && (
         <div className="">
           <Chart2
             className="h-80"
@@ -173,8 +172,6 @@ export function ComboboxForm() {
             data={chartData}
           />
         </div>
-      ) : (
-        <p>Enter a valid stock symbol and click Submit to view the chart.</p>
       )}
     </div>
   );
