@@ -89,7 +89,12 @@ export function ComboboxForm() {
     setTickers(data);
   }
 
+  const [chartLoad, setChartLoad] = useState(false);
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+
+    setChartLoad(true)
+
     toast({
       title: "You submitted the following values:",
       description: (
@@ -103,6 +108,7 @@ export function ComboboxForm() {
     const data2 = await response.json();
     const chartData = data2.data;
     setChartData(chartData);
+    setChartLoad(false)
   }
 
   const options = {
@@ -193,7 +199,7 @@ export function ComboboxForm() {
         ) : (<div className="flex gap-4"><CircleDashed className="animate-spin-slow" />Loading...</div>)}
       </div>
 
-      {chartData && (
+      {chartData && 
         <div className="">
           <Chart2
             className="h-80"
@@ -202,7 +208,9 @@ export function ComboboxForm() {
             data={chartData}
           />
         </div>
-      )}
+       }
+
+       {(!chartData && chartLoad) && <div className="flex gap-4"><CircleDashed className="animate-spin-slow" />Loading...</div>}
     </div>
   );
 }
