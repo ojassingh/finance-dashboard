@@ -29,11 +29,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Chart as Chart2 } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { ModeToggle } from "./Toggle";
-
+import axios from "axios";
 const FormSchema = z.object({
   symbol: z.string({
     required_error: "Please select a symbol.",
@@ -42,6 +42,19 @@ const FormSchema = z.object({
 
 export function ComboboxForm() {
   Chart.register(...registerables);
+
+  const [allData, setAllData] = useState(null);
+
+  async function getData() {
+    const data = await fetch("/api/tickers");
+    const stockTicers = await data.json();
+    setAllData(stockTicers.response);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -57,9 +70,18 @@ export function ComboboxForm() {
 
   async function fetchSuggestions(input: string) {
     setTickers([{ name: "Loading...", symbol: "" }]);
-    const tickers = await fetch(`/api/suggestions?input=${input}`);
-    const data = await tickers.json();
-    setTickers(data.results);
+
+    const tickers: any = await axios
+      .post(`/api/suggestions?input=${input}`, {
+        body: allData,
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    const data = await tickers.data.results;
+    console.log(data)
+    setTickers(data);
   }
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -97,70 +119,72 @@ export function ComboboxForm() {
         <ModeToggle />
       </div>
       <div className="">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="symbol"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl id=":R7kracq:-form-item-description">
-                      <Button
-                        id=":R7kracq:-form-item"
-                        aria-describedby=":R7kracq:-form-item-description"
-                        aria-controls="radix-:R2nkracq:"
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-[200px] justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value || "Select Symbol"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                      <CommandInput
-                        onValueChange={(event) => {
-                          handleInputChange(event);
-                        }}
-                        placeholder="Search framework..."
-                      />
-                      <CommandEmpty>No framework found.</CommandEmpty>
-                      <CommandGroup>
-                        {tickers.map((ticker: any) => (
-                          <CommandItem
-                            value={ticker.smybol}
-                            key={ticker.symbol}
-                            onSelect={() => {
-                              form.setValue("symbol", ticker.symbol);
-                              setSymbol(ticker.symbol);
-                              // console.log(ticker.symbol);
-                            }}
-                          >
-                            {ticker.name}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button variant="outline" type="submit">
-            Submit
-          </Button>
-          </div>
-        </form>
-      </Form>
+        {allData && (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="flex gap-4">
+                <FormField
+                  control={form.control}
+                  name="symbol"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl id=":R7kracq:-form-item-description">
+                            <Button
+                              id=":R7kracq:-form-item"
+                              aria-describedby=":R7kracq:-form-item-description"
+                              aria-controls="radix-:R2nkracq:"
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-[200px] justify-between",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value || "Select Symbol"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0">
+                          <Command>
+                            <CommandInput
+                              onValueChange={(event) => {
+                                handleInputChange(event);
+                              }}
+                              placeholder="Search framework..."
+                            />
+                            <CommandEmpty>No framework found.</CommandEmpty>
+                            <CommandGroup>
+                              {tickers.map((ticker: any) => (
+                                <CommandItem
+                                  value={ticker.smybol}
+                                  key={ticker.symbol}
+                                  onSelect={() => {
+                                    form.setValue("symbol", ticker.symbol);
+                                    setSymbol(ticker.symbol);
+                                    // console.log(ticker.symbol);
+                                  }}
+                                >
+                                  {ticker.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button variant="outline" type="submit">
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </Form>
+        )}
       </div>
 
       {chartData && (
