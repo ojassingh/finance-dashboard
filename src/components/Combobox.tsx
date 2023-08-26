@@ -40,6 +40,8 @@ const FormSchema = z.object({
   }),
 });
 
+import { CircleDashed } from "lucide-react";
+
 export function ComboboxForm() {
   Chart.register(...registerables);
 
@@ -122,7 +124,7 @@ export function ComboboxForm() {
         <ModeToggle />
       </div>
       <div className="">
-        {allData && (
+        {allData ? (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="flex gap-4">
@@ -158,7 +160,7 @@ export function ComboboxForm() {
                               }}
                               placeholder="Search ticker or name..."
                             />
-                            <CommandEmpty>{loading ? "Loading...:": "Not found "}</CommandEmpty>
+                            <CommandEmpty>{loading ? " Loading...:":  "Not found "}</CommandEmpty>
                             <CommandGroup>
                               {tickers.map((ticker: any) => (
                                 <CommandItem
@@ -187,7 +189,7 @@ export function ComboboxForm() {
               </div>
             </form>
           </Form>
-        )}
+        ) : (<div className="flex gap-4"><CircleDashed className="animate-spin-slow" />Loading...</div>)}
       </div>
 
       {chartData && (
