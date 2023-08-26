@@ -110,10 +110,11 @@ export function ComboboxForm() {
     plugins: {
       legend: {
         position: "top" as const,
+        text: "Daily data",
       },
       title: {
         display: true,
-        text: "Line Chart",
+        text: "Daily Chart",
       },
     },
   };

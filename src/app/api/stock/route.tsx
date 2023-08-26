@@ -51,7 +51,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       );
     }
 
-    var labels = Object.keys(timeSeries).reverse().slice(0, 100);
+    var labels = Object.keys(timeSeries).reverse().slice(0, 50);
     const prices = Object.values(timeSeries).map((data: any) =>
       parseFloat(data["4. close"])
     );
