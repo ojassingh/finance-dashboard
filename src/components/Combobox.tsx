@@ -62,14 +62,17 @@ export function ComboboxForm() {
   const [tickers, setTickers] = useState<any>([]);
   const [symbol, setSymbol] = useState("");
   const [chartData, setChartData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   function handleInputChange(event: any) {
+    setLoading(true)
     const input = event;
     fetchSuggestions(input);
+    setLoading(false);
   }
 
   async function fetchSuggestions(input: string) {
-    setTickers([{ name: "Loading...", symbol: "" }]);
+
 
     const tickers: any = await axios
       .post(`/api/suggestions?input=${input}`, {
@@ -153,9 +156,9 @@ export function ComboboxForm() {
                               onValueChange={(event) => {
                                 handleInputChange(event);
                               }}
-                              placeholder="Search framework..."
+                              placeholder="Search ticker or name..."
                             />
-                            <CommandEmpty>No framework found.</CommandEmpty>
+                            <CommandEmpty>{loading ? "Loading...:": "Not found "}</CommandEmpty>
                             <CommandGroup>
                               {tickers.map((ticker: any) => (
                                 <CommandItem
