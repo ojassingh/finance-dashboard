@@ -38,6 +38,7 @@ const FormSchema = z.object({
 import { CircleDashed } from "lucide-react";
 import Chat from "./Chat";
 import Line from "./Chart";
+import Articles from "./Articles";
 
 export function Dashboard() {
   const [allData, setAllData] = useState(null);
@@ -108,7 +109,7 @@ export function Dashboard() {
     const articles = await articlesResponse.json();
     const articleData = articles.articles;
     setArtices(articleData);
-    console.log(articleData);
+    // console.log(articleData);
   }
 
   return (
@@ -189,19 +190,25 @@ export function Dashboard() {
         )}
       </div>
 
-      {chartData && (
+      {(chartData && articles) && (
         <div>
+          <div className="flex gap-10">
           <Line chartData={chartData} />
           <Chat chartData={chartData} />
+          
+        </div>
+        <div className="">
+          <Articles articles={articles}/>
+        </div>
         </div>
       )}
 
-      {!chartData && chartLoad && (
-        <div className="flex gap-4">
-          <CircleDashed className="animate-spin-slow" />
-          Loading...
-        </div>
-      )}
+      {(!chartData || !articles) && chartLoad && (
+          <div className="flex gap-4">
+            <CircleDashed className="animate-spin-slow" />
+            Loading...
+          </div>
+        )}
     </div>
   );
 }

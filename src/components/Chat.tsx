@@ -16,7 +16,7 @@ export default function Chat(chartData: any, artices:any) {
         <label>
           Say something...
           <input
-            className="fixed w-full max-w-md bottom-0 border border-gray-300 rounded mb-8 shadow-xl p-2"
+            className="border border-gray-300 rounded"
             value={input}
             onChange={handleInputChange}
           />
