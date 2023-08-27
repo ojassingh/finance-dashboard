@@ -82,6 +82,7 @@ export function Dashboard() {
   }
 
   const [chartLoad, setChartLoad] = useState(false);
+  const [articles, setArtices] = useState(null);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setChartLoad(true);
@@ -95,11 +96,19 @@ export function Dashboard() {
       ),
     });
 
-    const response = await fetch(`/api/stock?symbol=${symbol}&interval=daily`);
-    const data2 = await response.json();
+    const chartResponse = await fetch(
+      `/api/stock?symbol=${symbol}&interval=daily`
+    );
+    const data2 = await chartResponse.json();
     const chartData = data2.data;
     setChartData(chartData);
     setChartLoad(false);
+
+    const articlesResponse = await fetch(`/api/news?query=${symbol}`);
+    const articles = await articlesResponse.json();
+    const articleData = articles.articles;
+    setArtices(articleData);
+    console.log(articleData);
   }
 
   return (
