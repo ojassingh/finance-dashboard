@@ -17,10 +17,8 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -30,9 +28,6 @@ import {
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
-import { Chart as Chart2 } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
-import { ModeToggle } from "./Toggle";
 import axios from "axios";
 const FormSchema = z.object({
   symbol: z.string({
@@ -41,10 +36,10 @@ const FormSchema = z.object({
 });
 
 import { CircleDashed } from "lucide-react";
+import Chat from "./Chat";
+import Line from "./Chart";
 
-export function ComboboxForm() {
-  Chart.register(...registerables);
-
+export function Dashboard() {
   const [allData, setAllData] = useState(null);
 
   async function getData() {
@@ -66,16 +61,14 @@ export function ComboboxForm() {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  function handleInputChange(event: any) {
-    setLoading(true)
+  function handleChange(event: any) {
+    setLoading(true);
     const input = event;
     fetchSuggestions(input);
     setLoading(false);
   }
 
   async function fetchSuggestions(input: string) {
-
-
     const tickers: any = await axios
       .post(`/api/suggestions?input=${input}`, {
         body: allData,
@@ -85,15 +78,13 @@ export function ComboboxForm() {
       });
 
     const data = await tickers.data.results;
-    console.log(data)
     setTickers(data);
   }
 
   const [chartLoad, setChartLoad] = useState(false);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-
-    setChartLoad(true)
+    setChartLoad(true);
 
     toast({
       title: "You submitted the following values:",
@@ -108,28 +99,11 @@ export function ComboboxForm() {
     const data2 = await response.json();
     const chartData = data2.data;
     setChartData(chartData);
-    setChartLoad(false)
+    setChartLoad(false);
   }
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-        text: "Daily data",
-      },
-      title: {
-        display: true,
-        text: "Daily Chart",
-      },
-    },
-  };
 
   return (
     <div className={`grid place-content-center min-h-screen`}>
-      <div className="fixed top-0 right-0 p-4 ">
-        <ModeToggle />
-      </div>
       <div className="">
         {allData ? (
           <Form {...form}>
@@ -163,11 +137,13 @@ export function ComboboxForm() {
                           <Command>
                             <CommandInput
                               onValueChange={(event) => {
-                                handleInputChange(event);
+                                handleChange(event);
                               }}
                               placeholder="Search ticker or name..."
                             />
-                            <CommandEmpty>{loading ? " Loading...:":  "Not found "}</CommandEmpty>
+                            <CommandEmpty>
+                              {loading ? " Loading...:" : "Not found "}
+                            </CommandEmpty>
                             <CommandGroup>
                               {tickers.map((ticker: any) => (
                                 <CommandItem
@@ -196,21 +172,27 @@ export function ComboboxForm() {
               </div>
             </form>
           </Form>
-        ) : (<div className="flex gap-4"><CircleDashed className="animate-spin-slow" />Loading...</div>)}
+        ) : (
+          <div className="flex gap-4">
+            <CircleDashed className="animate-spin-slow" />
+            Loading...
+          </div>
+        )}
       </div>
 
-      {chartData && 
-        <div className="">
-          <Chart2
-            className="h-80"
-            type="line"
-            options={options}
-            data={chartData}
-          />
+      {chartData && (
+        <div>
+          <Line chartData={chartData} />
+          <Chat chartData={chartData} />
         </div>
-       }
+      )}
 
-       {(!chartData && chartLoad) && <div className="flex gap-4"><CircleDashed className="animate-spin-slow" />Loading...</div>}
+      {!chartData && chartLoad && (
+        <div className="flex gap-4">
+          <CircleDashed className="animate-spin-slow" />
+          Loading...
+        </div>
+      )}
     </div>
   );
 }
