@@ -86,6 +86,10 @@ export function Dashboard() {
   const [articles, setArtices] = useState(null);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+
+    
+    setArtices(null);
+    setChartData(null);
     setChartLoad(true);
 
     toast({
@@ -102,19 +106,20 @@ export function Dashboard() {
     );
     const data2 = await chartResponse.json();
     const chartData = data2.data;
-    setChartData(chartData);
-    setChartLoad(false);
 
     const articlesResponse = await fetch(`/api/news?query=${symbol}`);
     const articles = await articlesResponse.json();
     const articleData = articles.articles;
+
+    setChartData(chartData);
+    setChartLoad(false);
     setArtices(articleData);
     // console.log(articleData);
   }
 
   return (
-    <div className={`grid place-content-center min-h-screen`}>
-      <div className="">
+    <div className={`grid place-content-center mx-auto px-20`}>
+      <div className="grid place-content-center p-10">
         {allData ? (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -191,8 +196,8 @@ export function Dashboard() {
       </div>
 
       {(chartData && articles) && (
-        <div>
-          <div className="flex gap-10">
+        <div className="grid gap-10 place-content-center">
+          <div className="flex flex-wrap gap-10 place-content-center">
           <Line chartData={chartData} />
           <Chat chartData={chartData} />
           

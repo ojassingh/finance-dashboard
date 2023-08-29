@@ -17,8 +17,17 @@ import {
   } from "./ui/card"
 
   import {motion} from "framer-motion";
+  import { format, parseISO } from 'date-fns';
+
   
   export function Article(article: any, key: any) {
+
+    function formatDateString(dateString: any) {
+        const date = parseISO(dateString);
+        const formattedDate = format(date, 'dd MMMM yyyy');
+      
+        return formattedDate;
+    }      
 
     const articleData = article.article;
     // console.log(articleData)
@@ -31,28 +40,29 @@ import {
     }
 
 
-    const date = new Date(articleData.publishedDate);
-    const options: any = { year: 'numeric', month: 'long' };
-    const formattedDate = date.toLocaleDateString('en-US', options);
+    const date = articleData.publishedAt
+    const formattedDate = formatDateString(date)
 
 
     
     return (
-      <motion.a key={key} whileHover={{scale: 0.98,
-        transition: { type: "spring", duration: 0.8 }}} className="z-0" href={articleData.url} target="_blank">
+      <motion.div key={key} whileHover={{scale: 0.98,
+        transition: { type: "spring", duration: 0.8 }}} className="z-0" >
         <Card className="w-80">
         <CardHeader className="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0">
           <div className="space-y-1">
-            <CardTitle>
-                {title}
-            </CardTitle>
+            <a href={articleData.url} target="_blank">
+              <CardTitle className="hover:underline">
+                  {title}
+              </CardTitle>
+            </a>
             <CardDescription>
               {description}
             </CardDescription>
           </div>
           <div className="flex items-center space-x-1 rounded-md bg-secondary text-secondary-foreground">
             <Button variant="secondary" className="px-3 shadow-none z-10">
-              <StarIcon className="mr-2 h-4 w-4" />
+              <StarIcon className="mr-2 h-4 w-4 z-20" />
               Star
             </Button>
           </div>
@@ -67,6 +77,6 @@ import {
           </div>
         </CardContent>
       </Card>
-      </motion.a>
+      </motion.div>
     )
   }
