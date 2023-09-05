@@ -1,4 +1,4 @@
-# Finance Dashboard with Next.js, TypeScript, Alpha Vantage, Newsdata.io, MySQL, Prisma, and Docker
+[# Finance Dashboard with Next.js, TypeScript, Alpha Vantage, Newsdata.io, MySQL, Prisma, and Docker
 ## Overview
 This is a finance dashboard application that allows users to fetch stock data and read news articles for any stock ticker. It is built using Next.js and TypeScript for the frontend, Alpha Vantage for stock data, Newsdata.io for news articles, MySQL for user information storage, Prisma as the ORM, and Docker to run a MySQL container locally.
 
@@ -169,3 +169,4 @@ This project is licensed under the MIT License.
 ## Acknowledgments 
 
 Special thanks to the Spotify Web API for providing the necessary tools to create this application.
+](https://github.com/ojassingh/trading-dashboard)https://github.com/ojassingh/trading-dashboard
