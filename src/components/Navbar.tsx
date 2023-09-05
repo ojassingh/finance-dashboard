@@ -14,7 +14,7 @@ export default function Navbar() {
       setAuth(true);
     }
     console.log(status)
-  });
+  }, []);
 
   return (
     <div className="flex gap-10 place-content-around">
