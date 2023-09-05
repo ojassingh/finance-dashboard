@@ -124,6 +124,8 @@ export function Dashboard() {
     setChartData(chartData);
     setChartLoad(false);
     setArtices(articleData);
+
+    console.log(chartData, articleData);
   }
 
   async function addToWishlist() {
