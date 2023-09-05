@@ -39,8 +39,20 @@ import { CircleDashed } from "lucide-react";
 import Chat from "./Chat";
 import Line from "./Chart";
 import Articles from "./Articles";
+import { useSession } from "next-auth/react";
 
 export function Dashboard() {
+  const { data: session, status } = useSession();
+
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      setAuth(true);
+    }
+    console.log("authenticated:", auth)
+  }, []);
+
   const [allData, setAllData] = useState(null);
 
   async function getData() {
@@ -86,8 +98,6 @@ export function Dashboard() {
   const [articles, setArtices] = useState(null);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-
-    
     setArtices(null);
     setChartData(null);
     setChartLoad(true);
@@ -114,7 +124,26 @@ export function Dashboard() {
     setChartData(chartData);
     setChartLoad(false);
     setArtices(articleData);
-    // console.log(articleData);
+  }
+
+  async function addToWishlist() {
+    try {
+      const newData = await axios({
+        method: "post",
+        url: "/api/addindex",
+        data: {
+          email: session?.user?.email,
+          name: session?.user?.name,
+          index: symbol,
+        },
+      });
+      
+      alert("Added to wishlist")
+
+      // console.log(newData)
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   return (
@@ -195,25 +224,31 @@ export function Dashboard() {
         )}
       </div>
 
-      {(chartData && articles) && (
-        <div className="grid gap-10 place-content-center">
-          <div className="flex flex-wrap gap-10 place-content-center">
-          <Line chartData={chartData} />
-          <Chat chartData={chartData} />
-          
-        </div>
-        <div className="">
-          <Articles articles={articles}/>
-        </div>
+      {chartData && articles && (
+        <div>
+          {auth && (
+            <Button onClick={addToWishlist} variant="outline">
+              Add to wishlist
+            </Button>
+          )}
+          <div className="grid gap-10 place-content-center">
+            <div className="flex flex-wrap gap-10 place-content-center">
+              <Line chartData={chartData} />
+              <Chat chartData={chartData} />
+            </div>
+            <div className="">
+              <Articles articles={articles} />
+            </div>
+          </div>
         </div>
       )}
 
       {(!chartData || !articles) && chartLoad && (
-          <div className="flex gap-4">
-            <CircleDashed className="animate-spin-slow" />
-            Loading...
-          </div>
-        )}
+        <div className="flex gap-4">
+          <CircleDashed className="animate-spin-slow" />
+          Loading...
+        </div>
+      )}
     </div>
   );
 }

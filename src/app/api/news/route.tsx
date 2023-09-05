@@ -17,4 +17,5 @@ export async function GET(req: NextRequest, res: NextResponse) {
   } catch {
     return NextResponse.json({ error: "Error found" }, { status: 500 });
   }
+  // return NextResponse.json(tickerArray, { status: 200 });
 }
