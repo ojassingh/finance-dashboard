@@ -6,9 +6,9 @@ This is a finance dashboard application that allows users to fetch stock data an
 
 
 ## Features
-### Stock Data: Fetch real-time stock data for any ticker symbol.
-### News Articles: Retrieve the latest news articles related to a selected stock.
-### User Accounts: Store user information securely using MySQL and Prisma.
+-  Stock Data: Fetch real-time stock data for any ticker symbol.
+-  News Articles: Retrieve the latest news articles related to a selected stock.
+-  User Accounts: Store user information securely using MySQL and Prisma.
 
 ## Prerequisites
 Before running the application, ensure you have the following installed:
@@ -18,13 +18,11 @@ Before running the application, ensure you have the following installed:
 ## Getting Started
 
 1. Clone the repository:
-
-```bash
 Copy code
+```bash
 git clone https://github.com/yourusername/finance-dashboard.git
-Navigate to the project directory:
 ```
-
+Navigate to the project directory:
 2. Copy code
 ```bash
 cd finance-dashboard
@@ -33,7 +31,6 @@ Install project dependencies:
 
 3. Copy code
 ```bash
-
 npm install
 ```
 
@@ -41,8 +38,7 @@ npm install
 
 Create a .env.local file in the project root and configure the following environment variables:
 
-```env
-Copy code
+```bash
 # Alpha Vantage API Key (Get your key at https://www.alphavantage.co/)
 ALPHA_VANTAGE_API_KEY=your_api_key_here
 
@@ -87,15 +83,8 @@ npm run dev
 
 
 ## Acknowledgments
-Alpha Vantage (https://www.alphavantage.co/)
-Newsdata.io (https://newsdata.io/)
-Next.js (https://nextjs.org/)
-Prisma (https://www.prisma.io/)
-Contributing
-Contributions are welcome! Please follow our contributing guidelines to get started.
+- Alpha Vantage (https://www.alphavantage.co/)
+- Newsdata.io (https://newsdata.io/)
+- Next.js (https://nextjs.org/)
+- Prisma (https://www.prisma.io/)
 
-
-## Acknowledgments 
-
-Special thanks to the Spotify Web API for providing the necessary tools to create this application.
-](https://github.com/ojassingh/trading-dashboard)https://github.com/ojassingh/trading-dashboard
